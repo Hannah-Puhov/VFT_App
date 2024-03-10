@@ -17,3 +17,7 @@ def open_files(files):
             time.sleep(2)
 
     st.success("All done!")
+
+
+def analyze_file(file):
+    pass
