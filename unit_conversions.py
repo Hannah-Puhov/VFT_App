@@ -44,7 +44,7 @@ class UnitConversions:
         return self.Cdm2_to_contrast(self.dB_to_Cdm2(dB))
 
 
-    def Contrast_to_dB(self, contrast):
+    def contrast_to_dB(self, contrast):
     
         return self.Cdm2_to_dB(self.contrast_to_Cdm2(contrast))
     
