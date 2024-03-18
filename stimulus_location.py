@@ -1,10 +1,10 @@
 class StimulusLocation:
 
-    def __init__(self, group, x, y, resFile):
+    def __init__(self, group, x, y, resOutput):
         self.x = x
         self.y = y
         self.group = group
-        self.resFile = resFile
+        self.resOutput = resOutput
 
         self.logContrasts = []
         self.reversals = []
@@ -29,6 +29,9 @@ class StimulusLocation:
 
                 if (res == "No"):
                     self.FNMissed += 1
+
+
+    
 
     
 

@@ -1,6 +1,23 @@
 import streamlit as st
+from weibull_calculator import WeibullCalculator
+from unit_conversions import UnitConversions
 from display_helpers import *
-from input_analyzer import open_files
 
+#Get the log files from user input
 files = initial_setup()
-open_files(files)
+
+#Initialize "static" classes
+calc = WeibullCalculator()
+converter = UnitConversions()
+
+#Open and analyze the log files
+results, heatmaps = open_files(files)
+
+#TODO: button to allow user to decide if they want to view heatmaps
+
+#If button: display heatmaps
+#else:
+
+download_heatmaps(heatmaps)
+
+download_results(results)
