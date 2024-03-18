@@ -38,6 +38,9 @@ def open_files(files, calc, converter):
     """
     current_file = st.empty()
     bar = st.progress(0)
+    if len(files) == 0:
+        st.stop()
+        
     indexIteration = (int) (100 / len(files))
     index = indexIteration
 

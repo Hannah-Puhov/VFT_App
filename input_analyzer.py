@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from io import StringIO
 from stimulus_location import StimulusLocation
 
 
@@ -14,35 +15,36 @@ def analyze_file(file, calc, converter):
     resultsFilename = file.name.replace('_Log', 'Results')
     resultsOutput = []
 
-    with open(file, 'r') as f:
-        resultsOutput.append(f.readline())
-
-    fp_fc_counter(log, resultsOutput)
+    file_string = StringIO(file.getvalue().decode('utf-8')).read()
+    first_lines = file_string.split('\n')[:3]
+    
+    resultsOutput.append(first_lines)
 
     log = pd.read_csv(file, skiprows=1)
-    for row in log.iterrows(): 
-        loc = (row[1], row[2])
+    fp_fc_counter(log, resultsOutput)
 
-        if (row[3] == 'Default'):
+    for row in log.iterrows(): 
+        loc = (row[1][1], row[1][2])
+        if (row[1][3] == 'Default'):
 
             if not loc in locs.keys():
-                stim = StimulusLocation(row[0], row[1], row[2], resultsOutput)
-                stim.logContrasts.append(row[5])
-                stim.responses.append(row[7])
+                stim = StimulusLocation(row[1][0], row[1][1], row[1][2], resultsOutput)
+                stim.logContrasts.append(row[1][5])
+                stim.responses.append(row[1][7])
 
                 locs.update({loc: stim})
             
             else:
-                locs[loc].logContrasts.append(row[5])
-                locs[loc].responses.append(row[7])
+                locs[loc].logContrasts.append(row[1][5])
+                locs[loc].responses.append(row[1][7])
 
-                if row[8] == 'Yes':
-                    locs[loc].reversals.append(row[5])
+                if row[1][8] == 'Yes':
+                    locs[loc].reversals.append(row[1][5])
         
-        elif row[3] == 'FN':
+        elif row[1][3] == 'FN':
             if not loc in locs.keys():
-                stim = StimulusLocation(row[0], row[1], row[2], resultsOutput)
-                stim.candidateFN.append(row[6])
+                stim = StimulusLocation(row[1][0], row[1][1], row[1][2], resultsOutput)
+                stim.candidateFN.append(row[1][6])
                 locs.update({loc: stim})
             else:
                 locs[loc]
@@ -65,8 +67,8 @@ def fp_fc_counter(log, resultsOutput):
     fix_checks = 0
     fix_loss = 0
 
-    test_types = log['Test Type'].to_array()
-    responses = log['Responses'].to_array()
+    test_types = log['Test type'].to_numpy()
+    responses = log['Responses'].to_numpy()
 
     trials = len(test_types)
 
@@ -79,7 +81,11 @@ def fp_fc_counter(log, resultsOutput):
                 fix_loss += 1
 
     percent_FP = fps / trials
-    percent_FL = fix_loss / fix_checks
+
+    if fix_checks > 0:
+        percent_FL = fix_loss / fix_checks
+    else:
+        percent_FL = 0
 
     headers = ['Total trials', 'Percent false pos', 'Percent fixation loss']
     results = [f'{trials}', f'{percent_FP:.2f}', f'{percent_FL:.2f}']
@@ -101,7 +107,7 @@ def FN_counter(locs, resultsOutput):
     for stim in locs.values():
         FN_total += stim.numFN
         FN_missed += stim.FNMissed
-        FN_candidates += len(stim.FNCandidates)
+        FN_candidates += len(stim.candidateFN)
 
     percentFN = FN_missed/FN_total
     FNResults = ['False neg candidates: ', f'{FN_candidates}', 'False neg percent: ', f'{percentFN:.1f}']
@@ -112,7 +118,7 @@ def finalize_file(locs, resultsOutput):
     resultsOutput.append(headers)
 
     for loc in locs.values():
-        loc.add_final_csv_line()
+        loc.add_final_csv_line(resultsOutput)
 
     output = '\n'.join([', '.join(map(str, sublist)) 
                         for sublist in resultsOutput])
@@ -121,7 +127,7 @@ def finalize_file(locs, resultsOutput):
 
     return output, heatmap
 
-def make_heatmap():
+def make_heatmap(resultsOutput):
     #TODO
     pass
     

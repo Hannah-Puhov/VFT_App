@@ -58,7 +58,7 @@ class WeibullCalculator:
         
         return to_ret
     
-    def fit_weibull(self, responses, logContrasts):
+    def fit_weibull(self, logContrasts, responses):
         """Fit a Weibull function to find the true threshold of 
             sensitivity for a givem location given the log contrasts and the 
             responses at each stimulus time. 
@@ -81,16 +81,17 @@ class WeibullCalculator:
         #Initialization
         optLambda = self.Lambda[0]
         LL0 = -math.inf
+        logContrasts = [int(x) for x in logContrasts]
 
         #Separate responses into seen / not seen
         for i in range(len(responses)):
             if responses[i] == "Yes":
                 CRx.append(logContrasts[i])
-                CRx_10.append(math.pow(10, logContrasts))
+                CRx_10.append(math.pow(10, logContrasts[i]))
             
             else:
                 IRx.append(logContrasts[i])
-                IRx_10.append(math.pow(10, logContrasts))
+                IRx_10.append(math.pow(10, logContrasts[i]))
 
         #Loop through possible shape and scale parameters to find the optimum
         for l in range(self.numElementsLambda):

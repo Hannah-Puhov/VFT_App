@@ -1,3 +1,4 @@
+import streamlit as st
 class StimulusLocation:
 
     def __init__(self, group, x, y, resOutput):
@@ -19,16 +20,19 @@ class StimulusLocation:
     def finalize_location(self, weibullCalc, converter):
         self.reversalAverage = sum(self.reversals)
 
-        weibullCalc.fit_weibull(self.logcontrasts, self.responses)
+        self.threshold = weibullCalc.fit_weibull(self.logContrasts, self.responses)
         self.final_fn_calc(converter)
     
     def final_fn_calc(self, converter):
         for res in self.candidateFN:
-            if converter.contrast_to_dB(self.thresold) > 21:
+            if converter.contrast_to_dB(self.threshold) > 21:
                 self.numFN += 1
 
                 if (res == "No"):
                     self.FNMissed += 1
+
+    def add_final_csv_line(self, resultsOutput):
+        pass
 
 
     

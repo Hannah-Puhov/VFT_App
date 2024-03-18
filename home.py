@@ -11,7 +11,7 @@ calc = WeibullCalculator()
 converter = UnitConversions()
 
 #Open and analyze the log files
-results, heatmaps = open_files(files)
+results, heatmaps = open_files(files, calc, converter)
 
 #TODO: button to allow user to decide if they want to view heatmaps
 
