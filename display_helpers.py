@@ -31,16 +31,23 @@ def initial_setup():
     return files
 
 def open_files(files, calc, converter):
-    """_summary_
+    """Open inputted files and call file analyzer, then return
+        results file text and heatmaps
 
     Args:
-        files (_type_): _description_
-    """
+        files (list): List of UploadedFile objects from the st file input
+        calc (WeibullCalculator): Global Weibull calculator object 
+        converter (UnitConversions): Global unit conversions object
+
+    Returns:
+        map, map: A map of results file names and the corresponding list of lines,
+                    A map of results file names and the corresponding heatmaps
+    """    
     current_file = st.empty()
     bar = st.progress(0)
     if len(files) == 0:
         st.stop()
-        
+
     indexIteration = (int) (100 / len(files))
     index = indexIteration
 
@@ -58,11 +65,27 @@ def open_files(files, calc, converter):
     return results, heatmaps
 
 def download_heatmaps(heatmaps):
+    """Zip a collection of heatmaps and display a download button
+
+    Args:
+        heatmaps (list): A list of VFT heatmaps with reliability index data
+    """    
     pass
 
 def download_results(results):
+    """Zip a collection of results files and display a download button
+
+    Args:
+        results (list): A list of file-like objects containing the
+          results of a VFT
+    """    
     pass
 
 def display_heatmaps(heatmaps):
+    """Display a collection of heatmaps to the streamlit page
+
+    Args:
+        heatmaps (list): A list of VFT heatmaps with reliability index data
+    """    
     pass
 
