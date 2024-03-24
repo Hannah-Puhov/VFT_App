@@ -43,21 +43,31 @@ def open_files(files, calc, converter):
         map, map: A map of results file names and the corresponding list of lines,
                     A map of results file names and the corresponding heatmaps
     """    
+
+    #Set up a progress bar to track file processing
     current_file = st.empty()
     bar = st.progress(0)
     if len(files) == 0:
         st.stop()
 
+    #Calculate the iteration index for progress bar updating
     indexIteration = (int) (100 / len(files))
     index = indexIteration
 
+    #Initialize variables
     results = {}
     heatmaps = {}
+
+    #Iterate through each file (if they have been inputted)
     if files is not None:
         for file in files: 
+
+            #Display the current file name and update the progress
             current_file.text(f'Now analyzing {file.name}')
             bar.progress(index)
             index += indexIteration
+
+            #Get the file data and add the output and heatmap to corresponding dicts
             resultsFilename, output, heatmap = analyze_file(file, calc, converter)
             results.update({resultsFilename, output})
             heatmaps.update({resultsFilename, heatmap})
