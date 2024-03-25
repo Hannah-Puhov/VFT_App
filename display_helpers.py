@@ -1,3 +1,5 @@
+import os
+import zipfile
 import pandas as pd
 import streamlit as st
 from input_analyzer import analyze_file
@@ -80,7 +82,25 @@ def download_heatmaps(heatmaps):
     Args:
         heatmaps (list): A list of VFT heatmaps with reliability index data
     """    
-    pass
+    # Create a temporary directory to store the heatmap images
+    temp_dir = "temp_heatmaps"
+    os.makedirs(temp_dir, exist_ok=True)
+    
+    # Save each heatmap as an image in the temporary directory
+    for i, heatmap in enumerate(heatmaps):
+        heatmap.write_image(f"{temp_dir}/heatmap_{i}.png")
+    
+    # Create a zip file containing the heatmap images
+    with zipfile.ZipFile("heatmaps.zip", "w") as zipf:
+        for root, dirs, files in os.walk(temp_dir):
+            for file in files:
+                zipf.write(os.path.join(root, file), arcname=file)
+    
+    # Display a download button for the zip file
+    with open("heatmaps.zip", "rb") as f:
+        zip_data = f.read()
+    st.download_button(label="Download Heatmaps", data=zip_data, file_name="heatmaps.zip", mime="application/zip")
+
 
 def download_results(results):
     """Zip a collection of results files and display a download button
@@ -89,7 +109,26 @@ def download_results(results):
         results (list): A list of file-like objects containing the
           results of a VFT
     """    
-    pass
+    # Create a temporary directory to store the results files
+    temp_dir = "temp_results"
+    os.makedirs(temp_dir, exist_ok=True)
+    
+    # Save each result as a CSV file in the temporary directory
+    for i, result in enumerate(results):
+        with open(f"{temp_dir}/result_{i}.csv", "w") as f:
+            f.write(result)
+    
+    # Create a zip file containing the results files
+    with zipfile.ZipFile("results.zip", "w") as zipf:
+        for root, dirs, files in os.walk(temp_dir):
+            for file in files:
+                zipf.write(os.path.join(root, file), arcname=file)
+    
+    # Display a download button for the zip file
+    with open("results.zip", "rb") as f:
+        zip_data = f.read()
+    st.download_button(label="Download Results", data=zip_data, file_name="results.zip", mime="application/zip")
+
 
 def display_heatmaps(heatmaps):
     """Display a collection of heatmaps to the streamlit page
@@ -97,5 +136,19 @@ def display_heatmaps(heatmaps):
     Args:
         heatmaps (list): A list of VFT heatmaps with reliability index data
     """    
-    pass
+    # Calculate the number of columns based on browser width
+    num_columns = min(4, max(2, int(st._get_metrics_reporter().layout['browser']['size']['width'] / 400)))
+    
+    # Calculate the number of rows
+    num_rows = -(-len(heatmaps) // num_columns)  # Ceiling division
+    
+    # Display heatmaps in rows
+    for i in range(num_rows):
+        cols = st.columns(num_columns)
+        for j in range(num_columns):
+            idx = i * num_columns + j
+            if idx < len(heatmaps):
+                cols[j].plotly_chart(heatmaps[idx])
+            else:
+                cols[j].empty()
 
