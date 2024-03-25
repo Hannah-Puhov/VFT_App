@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from io import StringIO
 from stimulus_location import StimulusLocation
+from heatmap import *
 
 
 def analyze_file(file, calc, converter):
@@ -196,8 +197,6 @@ def finalize_file(locs, resultsOutput):
 
     return output, heatmap
 
-def make_heatmap(resultsOutput):
-    #TODO
-    pass
+
     
 
