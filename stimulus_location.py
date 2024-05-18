@@ -33,6 +33,7 @@ class StimulusLocation:
 
     def add_final_csv_line(self, resultsOutput, converter):
         #TODO fix list printing
+        st.text(f'reversal: {self.reversalAverage}')
         line = [f'{self.group}', f'{self.x}', f'{self.y}', 
                 f'{self.logContrasts}', f'{self.responses}',
                 f'{converter.contrast_to_dB(self.reversalAverage):.3f}',

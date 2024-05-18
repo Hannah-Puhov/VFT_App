@@ -1,13 +1,14 @@
 import math
+import streamlit as st
 
 class UnitConversions: 
     
     def __init__(self):
         """Call contrast axis setup as base for remaining methods
         """        
-        self.contrastAxisSetup()
+        self.contrast_axis_setup()
 
-    def contrastAxisSetup(self, maxCdm2 = 83.174, minCdm2 = 10.0):
+    def contrast_axis_setup(self, maxCdm2 = 83.174, minCdm2 = 10.0):
         """Set up the access that maps contrast to Cd/m^2
 
         Args:

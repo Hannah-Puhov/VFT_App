@@ -87,7 +87,7 @@ def analyze_file(file, calc, converter):
     FN_counter(locs, resultsOutput)
 
     #Finalize results file and output and return
-    output, heatmap = finalize_file(locs, resultsOutput)
+    output, heatmap = finalize_file(locs, resultsOutput, converter)
     return resultsFilename, output, heatmap
 
 def fp_fc_counter(log, resultsOutput):
@@ -165,7 +165,7 @@ def FN_counter(locs, resultsOutput):
     FNResults = ['False neg candidates: ', f'{FN_candidates}', 'False neg percent: ', f'{percentFN:.1f}']
     resultsOutput.append(FNResults)
 
-def finalize_file(locs, resultsOutput):
+def finalize_file(locs, resultsOutput, converter):
     """Finalize the results file using the stimulus location objects
 
     Args:
@@ -186,7 +186,7 @@ def finalize_file(locs, resultsOutput):
     #Add the final line from each stimulus location, including threshold
     for loc in locs.values():
         #TODO: Add a dunder compare method to sort list
-        loc.add_final_csv_line(resultsOutput)
+        loc.add_final_csv_line(resultsOutput, converter)
 
     #Generate the csv string representation of the results output
     output = '\n'.join([', '.join(map(str, sublist)) 

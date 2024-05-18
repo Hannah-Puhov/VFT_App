@@ -16,6 +16,7 @@ results, heatmaps = open_files(files, calc, converter)
 #TODO: button to allow user to decide if they want to view heatmaps
 
 #If button: display heatmaps
+display_heatmaps(heatmaps)
 #else:
 
 download_heatmaps(heatmaps)
