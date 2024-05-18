@@ -1,4 +1,5 @@
 import streamlit as st
+import numpy as np
 class StimulusLocation:
 
     def __init__(self, group, x, y, resOutput):
@@ -18,7 +19,7 @@ class StimulusLocation:
         self.threshold = 0
 
     def finalize_location(self, weibullCalc, converter):
-        self.reversalAverage = sum(self.reversals)
+        self.reversalAverage = np.average(self.reversals)
 
         self.threshold = weibullCalc.fit_weibull(self.logContrasts, self.responses)
         self.final_fn_calc(converter)

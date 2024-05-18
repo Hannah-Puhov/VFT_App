@@ -27,12 +27,12 @@ def analyze_file(file, calc, converter):
     locs = {}
 
     #Generate the file name for the results file
-    resultsFilename = file.name.replace('_Log', 'Results')
+    resultsFilename = file.name.replace('_Log', '_Results')
     resultsOutput = []
 
-    #Copy the first 3 lines of the log file into results
+    #Copy the line of the log file into results
     file_string = StringIO(file.getvalue().decode('utf-8')).read()
-    first_lines = file_string.split('\n')[:3]
+    first_lines = file_string.split('\n')[:1]
     resultsOutput.append(first_lines)
 
     #Store the log file as a dataframe and count false pos and fix. checks
@@ -113,7 +113,7 @@ def fp_fc_counter(log, resultsOutput):
 
     #Add up all false positives, fixation checks, and fixation losses
     for i in range (len(log)):
-        if test_types[i] == 'False Positive':
+        if test_types[i] == 'False positive':
             fps += 1
         elif test_types[i] == 'Fixation check':
             fix_checks += 1
