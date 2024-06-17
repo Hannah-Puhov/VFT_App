@@ -1,3 +1,4 @@
+import io
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -6,7 +7,7 @@ def make_heatmap(file):
     filename = file
     TT = "TODO"
 
-    data = pd.read_csv(filename).values
+    data = pd.read_csv(io.StringIO(filename), sep=',').values
     xcor = data[:, 1]
     ycor = data[:, 2]
     sens = data[:, 6]

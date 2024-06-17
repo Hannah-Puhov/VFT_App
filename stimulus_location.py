@@ -32,8 +32,11 @@ class StimulusLocation:
                     self.FNMissed += 1
 
     def add_final_csv_line(self, resultsOutput, converter):
+        log_cont_string = ';'.join(map(str, self.logContrasts))
+        res_string = ';'.join(map(str,self.responses))
         line = [f'{self.group}', f'{self.x}', f'{self.y}', 
-                f'{self.logContrasts}', f'{self.responses}',
+                f'{log_cont_string}',
+                f'{res_string}',
                 f'{converter.contrast_to_dB(pow(10, self.reversalAverage)):.3f}',
                 f'{converter.contrast_to_dB(self.threshold):.3f}']
         

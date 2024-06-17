@@ -193,7 +193,7 @@ def finalize_file(locs, resultsOutput, converter):
                         for sublist in resultsOutput])
 
     #Generate the heatmap
-    heatmap = make_heatmap(resultsOutput)
+    heatmap = make_heatmap(output)
 
     return output, heatmap
 
