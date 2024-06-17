@@ -20,7 +20,6 @@ class StimulusLocation:
 
     def finalize_location(self, weibullCalc, converter):
         self.reversalAverage = np.average(self.reversals)
-
         self.threshold = weibullCalc.fit_weibull(self.logContrasts, self.responses)
         self.final_fn_calc(converter)
     
@@ -33,11 +32,9 @@ class StimulusLocation:
                     self.FNMissed += 1
 
     def add_final_csv_line(self, resultsOutput, converter):
-        #TODO fix list printing
-        st.text(f'reversal: {self.reversalAverage}')
         line = [f'{self.group}', f'{self.x}', f'{self.y}', 
                 f'{self.logContrasts}', f'{self.responses}',
-                f'{converter.contrast_to_dB(self.reversalAverage):.3f}',
+                f'{converter.contrast_to_dB(pow(10, self.reversalAverage)):.3f}',
                 f'{converter.contrast_to_dB(self.threshold):.3f}']
         
         resultsOutput.append(line)
