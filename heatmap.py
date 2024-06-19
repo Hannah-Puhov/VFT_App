@@ -7,10 +7,19 @@ def make_heatmap(file):
     filename = file
     TT = "TODO"
 
-    data = pd.read_csv(io.StringIO(filename), sep=',').values
-    xcor = data[:, 1]
-    ycor = data[:, 2]
-    sens = data[:, 6]
+    rows = filename.split('\n')
+    data_list = [row.split(',') for row in rows]
+
+    data = pd.DataFrame(data_list)
+
+    xcor = data[1][5:].tolist()
+    xcor = [int(i) for i in xcor]
+
+    ycor = data[2][5:].tolist()
+    ycor = [int(i) for i in ycor]
+
+    sens = data[6][5:].tolist()
+    sens = [float(i) for i in sens]
 
     if len(xcor) > 60:
         heatmap_10_2(xcor, ycor, sens, TT)
