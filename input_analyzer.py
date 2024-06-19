@@ -30,9 +30,10 @@ def analyze_file(file, calc, converter):
     resultsFilename = file.name.replace('_Log', '_Results')
     resultsOutput = []
 
-    #Copy the line of the log file into results
+    #Copy the first line of the log file into results
     file_string = StringIO(file.getvalue().decode('utf-8')).read()
     first_lines = file_string.split('\n')[:1]
+    first_lines[0] += ', , , , , , , , , '
     resultsOutput.append(first_lines)
 
     #Store the log file as a dataframe and count false pos and fix. checks
